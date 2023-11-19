@@ -3,6 +3,8 @@ import Header from './components/Header'
 import Produtos from './containers/Produtos'
 
 import { GlobalStyle } from './styles'
+import { Provider } from 'react-redux'
+import { store } from './store'
 
 export type Produto = {
   id: number
@@ -13,7 +15,6 @@ export type Produto = {
 
 function App() {
   const [produtos, setProdutos] = useState<Produto[]>([])
-  const [carrinho, setCarrinho] = useState<Produto[]>([])
   const [favoritos, setFavoritos] = useState<Produto[]>([])
 
   useEffect(() => {
@@ -22,12 +23,8 @@ function App() {
       .then((res) => setProdutos(res))
   }, [])
 
-  function adicionarAoCarrinho(produto: Produto) {
-    if (carrinho.find((p) => p.id === produto.id)) {
-      alert('Item já adicionado')
-    } else {
-      setCarrinho([...carrinho, produto])
-    }
+  function adicionarAoCarrinho() {
+    console.log('teste')
   }
 
   function favoritar(produto: Produto) {
@@ -40,10 +37,10 @@ function App() {
   }
 
   return (
-    <>
+    <Provider store={store}>
       <GlobalStyle />
       <div className="container">
-        <Header favoritos={favoritos} itensNoCarrinho={carrinho} />
+        <Header favoritos={favoritos} />
         <Produtos
           produtos={produtos}
           favoritos={favoritos}
@@ -51,7 +48,7 @@ function App() {
           adicionarAoCarrinho={adicionarAoCarrinho}
         />
       </div>
-    </>
+    </Provider>
   )
 }
 
